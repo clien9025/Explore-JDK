@@ -82,6 +82,7 @@ public class ExploreArrayList<E> extends AbstractList<E>
     private Object[] grow() {
         return grow(size + 1);
     }
+
     public int size() {
         return size;
     }
@@ -91,8 +92,84 @@ public class ExploreArrayList<E> extends AbstractList<E>
     }
 
     // TODO
-    @Override
+    public boolean contains(Object o) {
+        return indexOf(o) >= 0;
+    }
 
+    public int indexOf(Object o) {
+        return indexOfRange(o, 0, size);
+    }
+
+    private int indexOfRange(Object o, int start, int end) {
+        Object[] es = elementData;
+        if (null != o) {
+            for (int i = start; i < end; i++) {
+                if (o.equals(es[i])) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = start; i < end; i++) {
+                if (es[i] == null) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public int lastIndexOf(Object o) {
+        return lastIndexOfRange(o, 0, size);
+    }
+
+    private int lastIndexOfRange(Object o, int start, int end) {
+        Object[] es = elementData;
+        if (o == null) {
+            for (int i = end - 1; i >= start; i--) {
+                if (es[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = end - 1; i >= start; i--) {
+                if (o.equals(es[i])) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public Object clone() {
+        try {
+            ExploreArrayList<?> v = (ExploreArrayList<?>) super.clone();
+            v.elementData = Arrays.copyOf(elementData, size);
+            v.modCount = 0;
+            return v;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
+        }
+    }
+
+    public Object[] toArray() {
+        return Arrays.copyOf(elementData, size);
+    }
+
+    // TODO toArray 方法是干嘛的?
+    @SuppressWarnings("unchecked")
+    public <T> T[] toArray(T[] a) {
+
+        if (a.length < size)
+            // Make a new array of a's runtime type, but my contents:
+            return (T[]) Arrays.copyOf(elementData, size, a.getClass());
+        System.arraycopy(elementData, 0, a, 0, size);
+        if (a.length > size)
+            a[size] = null;
+        return a;
+    }
+
+
+    @Override
     public E get(int index) {
         return null;
     }
