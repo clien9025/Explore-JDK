@@ -1,5 +1,7 @@
 package zhanyang;
 
+import jdk.internal.util.ArraysSupport;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -13,6 +15,7 @@ public class ExploreArrayList<E> extends AbstractList<E>
     transient Object[] elementData;
     private static final Object[] EMPTY_ELEMENTDATA = {};
     private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
+    private static final int DEFAULT_CAPACITY = 10;
     private int size;
 
     // 判断 数组的容量
@@ -43,7 +46,51 @@ public class ExploreArrayList<E> extends AbstractList<E>
         }
     }
 
+    // 修剪 size
+    public void trimToSize() {
+        modCount++;
+        if (size < elementData.length) {
+            elementData = (size == 0)
+                    ? EMPTY_ELEMENTDATA
+                    : Arrays.copyOf(elementData, size);
+        }
+    }
 
+    // 确保容量
+    public void ensureCapacity(int minCapacity) {
+        if (minCapacity > elementData.length
+                && !(elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA &&
+                minCapacity <= DEFAULT_CAPACITY)) {
+            modCount++;
+            grow(minCapacity);
+        }
+    }
+
+    // 增长容量
+    public Object[] grow(int minCapacity) {
+        int oldCapacity = elementData.length;
+        if (oldCapacity > 0 || elementData != DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+            int newCapacity = ArraysSupport.newLength(oldCapacity,
+                    minCapacity - oldCapacity, /* minimum growth */
+                    oldCapacity >> 1           /* preferred growth */);
+            return elementData = Arrays.copyOf(elementData, newCapacity);
+        } else {
+            return elementData = new Object[(Math.max(minCapacity, DEFAULT_CAPACITY))];
+        }
+    }
+
+    private Object[] grow() {
+        return grow(size + 1);
+    }
+    public int size() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    // TODO
     @Override
 
     public E get(int index) {
@@ -68,11 +115,6 @@ public class ExploreArrayList<E> extends AbstractList<E>
     @Override
     public Stream<E> parallelStream() {
         return super.parallelStream();
-    }
-
-    @Override
-    public int size() {
-        return 0;
     }
 
     @Override
