@@ -269,63 +269,59 @@ public class ArrayListTest {
         Iterator<String> iterator = list.iterator();
 
         assertThrows(NoSuchElementException.class, iterator::next);
-//        // 等价形式
-//        assertThrows(NoSuchElementException.class, () -> iterator.next());
+        // 上行代码的 等价形式 就是下面代码
+        // 就是解释下面代码中 () -> iterator.next() 的含义
+        assertThrows(NoSuchElementException.class, () -> iterator.next());
 
 
-//        // 4
-//        test(() -> iterator.next());
-
-
-//
-        // 2
-//        Executable executable = new Executable() {
-//            @Override
-//            public void execute() throws Throwable {
-//                iterator.next();
-//            }
-//        };
-//        test(executable);
+        // 4
+        test(() -> iterator.next());
 
         // 3
-//        test(new Executable() {
-//            @Override
-//            public void execute() throws Throwable {
-//                iterator.next();
-//            }
-//        });
+        test(new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                iterator.next();
+            }
+        });
+
+        // 2
+        Executable executable = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                iterator.next();
+            }
+        };
+        test(executable);
 
 
-        /*
-        1
-         */
-//        test(new TestExecutable(iterator));
+        test(new TestExecutable(iterator));
     }
 
     /*
     1
      */
-//    private class TestExecutable implements Executable {
-//
-//        private final Iterator<String> iterator;
-//
-//        private TestExecutable(Iterator<String> iterator) {
-//            this.iterator = iterator;
-//        }
-//
-//        @Override
-//        public void execute() throws Throwable {
-//            iterator.next();
-//        }
-//    }
-//
-//    public void test(Executable executable) {
-//        try {
-//            executable.execute();
-//        } catch (Throwable e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    private class TestExecutable implements Executable {
+
+        private final Iterator<String> iterator;
+
+        private TestExecutable(Iterator<String> iterator) {
+            this.iterator = iterator;
+        }
+
+        @Override
+        public void execute() throws Throwable {
+            iterator.next();
+        }
+    }
+
+    public void test(Executable executable) {
+        try {
+            executable.execute();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     @Test
@@ -357,7 +353,6 @@ public class ArrayListTest {
 //        iterator.next();
 
         assertThrows(ConcurrentModificationException.class, iterator::next);
-
 
 
 //        List<String> list = createList();

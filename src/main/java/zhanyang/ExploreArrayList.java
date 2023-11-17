@@ -179,10 +179,10 @@ public class ExploreArrayList<E> extends AbstractList<E>
         super.forEach(action);
     }
 
-    @Override
-    public Spliterator<E> spliterator() {
-        return List.super.spliterator();
-    }
+//    @Override
+//    public Spliterator<E> spliterator() {
+//        return List.super.spliterator();
+//    }
 
     @Override
     public Stream<E> stream() {
@@ -204,13 +204,13 @@ public class ExploreArrayList<E> extends AbstractList<E>
         return super.removeIf(filter);
     }
 
-    @Override
-    public void replaceAll(UnaryOperator<E> operator) {
-        List.super.replaceAll(operator);
-    }
-
-    @Override
-    public void sort(Comparator<? super E> c) {
-        List.super.sort(c);
-    }
+//    @Override
+//    public void replaceAll(UnaryOperator<E> operator) {
+//        List.super.replaceAll(operator);
+//    }
+//
+//    @Override
+//    public void sort(Comparator<? super E> c) {
+//        List.super.sort(c);
+//    }
 }
